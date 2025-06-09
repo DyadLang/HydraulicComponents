@@ -1,0 +1,32 @@
+test component FluidSystemTest
+  signal = BlockComponents.Step(height=1e6, start_time=0.5)
+  src = BoundaryPressure()
+  vol = FixedVolume(vol=10.0, p0=0.0)
+  tube = TubeBase(area=tube_area, head_factor=1, length=50, shape_factor=64, add_inertia=add_inertia, perimeter=2*sqrt(tube_area*pi), m_flow0=0)
+  parameter tube_area::Area = 0.01
+  parameter add_inertia::Boolean = true
+  final parameter tube_perimeter::Length = 2*sqrt(tube_area*pi)
+  path medium::AbstractMedium = IsothermalCompressible(bulk_modulus=1e9, let_gas=false)
+relations
+  connect(signal.y, src.p)
+  connect(src.port, tube.port_a)
+  connect(tube.port_b, vol.port)
+  continuity(medium, vol.port.medium)
+metadata {
+  "Dyad": {
+    "tests": {
+      "case1": {
+        "stop": 2,
+        "atol": {
+          "vol.rho": 1e-3,
+          "vol.port.p": 1,
+          "tube.m_flow": 1e-3
+        },
+        "expect": {
+          "signals": ["vol.rho", "vol.port.p", "tube.m_flow"]
+        }
+      }
+    }
+  }
+}
+end

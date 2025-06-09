@@ -1,0 +1,9 @@
+# Boundary with prescribed pressure
+
+component BoundaryPressure
+  port = Port()
+  # Prescribed boundary pressure
+  p = RealInput()
+relations
+  port.p = p
+end

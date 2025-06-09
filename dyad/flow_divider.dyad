@@ -1,0 +1,21 @@
+# Reduces the flow from `port_a` to `port_b` by `n`. Useful for modeling parallel
+# tubes efficiently by placing a `FlowDivider` on each end of a tube.
+# Extra flow is dumped into an `open` port.
+component FlowDivider
+  # Divide flow from `port_a` to `port_b` by `n`
+  parameter n::Real
+  # Mass flow of `port_a`
+  variable m_flow_a::MassFlowRate
+  # Mass flow of `port_b`
+  variable m_flow_b::MassFlowRate
+
+  port_a = Port()
+  port_b = Port()
+  open = Port()
+relations
+  continuity(port_a.medium, port_b.medium, open.medium)
+  m_flow_a = port_a.m_flow
+  m_flow_b = port_b.m_flow
+  m_flow_b = m_flow_a / n
+  open.m_flow = m_flow_a - m_flow_b
+end

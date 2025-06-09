@@ -1,0 +1,10 @@
+partial component TwoPorts
+  variable Δp::AbsolutePressure
+  variable m_flow::MassFlowRate
+  port_a = Port()
+  port_b = Port()
+relations
+  continuity(port_a.medium, port_b.medium)
+  port_a.m_flow + port_b.m_flow = 0
+  Δp = port_a.p - port_b.p
+end

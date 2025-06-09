@@ -1,0 +1,15 @@
+connector Port
+  potential p::Pressure
+  flow m_flow::MassFlowRate
+  path medium::AbstractMedium
+metadata {
+  "Dyad": {
+    "labels": [{"label": "instance_name", "x": 0, "y": 750, "layer": "diagram"}],
+    "icons": {
+      "default": "dyad://HydraulicComponents/PortA.svg",
+      "hydraulic_port_a": "dyad://HydraulicComponents/PortA.svg",
+      "hydraulic_port_b": "dyad://HydraulicComponents/PortB.svg"
+    }
+  }
+}
+end

@@ -1,0 +1,16 @@
+# Fixed fluid volume.
+component FixedVolume
+  # Initial pressure
+  parameter p0::Pressure
+  parameter vol::Volume
+  variable rho::Density
+  variable m::Mass
+  variable p::Pressure
+  port = Port()
+relations
+  initial p = p0
+  rho = density(port.medium, p)
+  m = rho*vol
+  port.m_flow = der(m)
+  port.p = p
+end

@@ -1,0 +1,28 @@
+component TubeBase
+  extends TwoPorts
+  parameter area::Area
+  parameter length::Length
+  parameter perimeter::Length
+  parameter shape_factor::Real
+  parameter head_factor::Real
+  parameter add_inertia::Boolean = false
+  final parameter d_h::Length = 4 * area / perimeter
+  variable rho::Density
+  variable mu::DynamicViscosity
+  variable velocity::Velocity
+  variable sheer::Pressure
+  variable ff::Real
+  parameter m_flow0::MassFlowRate
+relations
+  initial m_flow = m_flow0
+  rho = density(port_a.medium, port_a.p)
+  mu = viscosity(port_a.medium)
+  velocity = m_flow / (rho * area)
+  ff = friction_factor(m_flow, area, d_h, mu, shape_factor)
+  sheer = 0.5 * rho * reg_pow(velocity, 2) * ff * head_factor * (length / d_h)
+  Δp = if add_inertia then
+    sheer + (length / area) * der(m_flow)
+  else
+    sheer
+  m_flow = port_a.m_flow
+end
